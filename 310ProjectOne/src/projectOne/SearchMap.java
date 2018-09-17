@@ -41,6 +41,7 @@ public class SearchMap {
         String cityTwo;
         String costFromOneToTwo;
         Vector<City> cityList = new Vector<City>();
+        Hashtable<String, Integer> costHash = new Hashtable<String, Integer>();
 
         try {
             // FileReader reads text files in the default encoding.
@@ -60,6 +61,7 @@ public class SearchMap {
                 costFromOneToTwo = scan.next();
                 scan.close();
                 int trueCost = Integer.parseInt(costFromOneToTwo);
+                costHash.put(cityOne+cityTwo, trueCost);
                 
    
                 found: {
@@ -121,7 +123,7 @@ public class SearchMap {
         
         for (int i = 0; i < cityList.size(); i++)
         {
-        		System.out.println(cityList.get(i).getConnectedCities());
+        		//System.out.println(cityList.get(i).getConnectedCities());
         		cityStringNames.add(cityList.get(i).getName());
         }
         
@@ -161,19 +163,123 @@ public class SearchMap {
         }
         
         Vector<Integer> finalList = fm.finalCity;
-        System.out.println(finalList);
+        
       
+        
+        
+        /*
+        for (int i = 0; i < finalCostVector.size(); i++)
+        {
+        		System.out.println(finalCostVector.get(i));
+        }
+        */
+        
+        /*
+        for (int i = 0; i < finalList.size(); i++)
+        {
+        		if (finalList.get(i) == originInteger && finalList.get(i+1) == originInteger)
+        		{
+        			finalList.remove(i);
+        		}
+        }
+        */
+        
+        /*
         
         for (int i = 0; i < finalList.size(); i++)
         {
-        		if (finalList.get(i) == originInteger && finalList.get(i+1) == 9999)
+        		System.out.println(finalList.get(i));
+        }
+        
+        */
+        
+        Vector<Integer> finalCostVector = new Vector<Integer>();
+        
+        for (int i = 0; i < finalList.size(); i++)
+        {
+        		int finalCost = 0; 
+        		while (finalList.get(i) != 999)
+        		{
+        			 
+        			String c1 = (String) getKeyFromValue(stringToInt, finalList.get(i));
+        			String c2 = (String) getKeyFromValue(stringToInt, finalList.get(i+1));
+        			
+        			if (c2 == null)
+        			{
+        				break;
+        			}
+        			
+        			String oneAndTwo = c1 + c2;
+        			
+        			finalCost += costHash.get(oneAndTwo);
+        			
+        			i++;
+        		}
+        		finalCostVector.add(finalCost);
+        }
+        for (int i = 0; i < finalCostVector.size(); i++)
+        {
+        		if (finalCostVector.get(i) == originInteger)
+        		{
+        			finalCostVector.remove(i);
+        		}
+        }
+        
+        for (int i = 0; i < finalList.size(); i++)
+        {
+        		if (finalList.get(i) == 999)
         		{
         			finalList.remove(i);
-        			finalList.remove(i);
+        		}
+        		
+        }
+        
+        
+        System.out.println("final cost vector:");
+        
+        for (int i = 0; i < finalCostVector.size(); i++)
+        {
+        		System.out.println(finalCostVector.get(i));
+        }
+        
+        System.out.println("list of paths:");
+        
+        
+        /*
+        for (int x = 0; x < finalList.size(); x++)
+        {
+        		if (finalList.get(x) == originInteger && finalList.get(x+1) == originInteger)
+        		{
+        			finalList.remove(originInteger);
+        		}
+        		
+        }
+        */
+      
+        Vector<String> lastDestinations = new Vector<String>();
+        Vector<String> finalListStrings = new Vector<String>();
+        
+        for (int i = 0; i < finalList.size(); i++)
+        {
+        	 	finalListStrings.add((String) (getKeyFromValue(stringToInt, finalList.get(i))));  
+        }
+        
+        
+        for (int j = 0; j < finalListStrings.size(); j++)
+        {
+        		if (finalListStrings.get(j).equals(fm.originCity.name))
+        		{
+        			System.out.println();
+        			
+        		}
+        		else
+        		{
+        			System.out.print(finalListStrings.get(j) + ",");
         		}
         }
         
         
+        /*
         for (int i = 0; i < finalList.size(); i++)
         {
         		int finalCost = 0;
@@ -200,6 +306,7 @@ public class SearchMap {
         		i++;
         		finalCost = 0;
         }
+        */
         
         
        

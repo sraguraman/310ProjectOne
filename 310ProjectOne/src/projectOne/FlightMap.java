@@ -82,7 +82,7 @@ public class FlightMap {
 				finalCity.add(currentPath[i]);
 				//System.out.print(currentPath[i] + " ");
 			}
-			finalCity.add(9999);
+			finalCity.add(999);
 			//System.out.println();
 		}
 		else
