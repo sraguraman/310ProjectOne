@@ -13,9 +13,6 @@ import java.util.Vector;
 
 
 public class SearchMap {
-	
-	
-
 	public static void main(String[] args) {
 		  // The name of the file to open.
         String fileName = "inputfile.txt";
@@ -143,7 +140,15 @@ public class SearchMap {
             }
             System.out.println();
         }
-
+        
+        for (int i = 0; i < cityStringNames.size(); i++)
+        {
+        		if (fm.getOriginCity().getName().equals(cityStringNames.get(i)))
+        		{
+        			BFS bfs = new BFS(fmMap, i);
+        			break;
+        		}
+        } 
     }
 		// TODO Auto-generated method stub
 }
