@@ -1,19 +1,36 @@
 package projectOne;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Vector;
 
 
 public class SearchMap {
-	public static void main(String[] args) {
+	public static Object getKeyFromValue(Map hm, Object value) {
+	    for (Object o : hm.keySet()) 
+	    {
+	      if (hm.get(o).equals(value)) 
+	      {
+	        return o;
+	      }
+	    }
+	    return null;
+	}
+	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
 		  // The name of the file to open.
         String fileName = "inputfile.txt";
 
@@ -93,8 +110,9 @@ public class SearchMap {
         }
         
         int numberOfVertices = cityList.size();
-       
+        
         FlightMap fm = new FlightMap(numberOfVertices);
+        
         fm.setOriginCity(cityList.get(0));
         //int [][]fmMap = fm.getGraphOfCities();
         Hashtable <String, Integer> stringToInt = new Hashtable<String, Integer>();
@@ -103,8 +121,8 @@ public class SearchMap {
         
         for (int i = 0; i < cityList.size(); i++)
         {
+        		System.out.println(cityList.get(i).getConnectedCities());
         		cityStringNames.add(cityList.get(i).getName());
-        		
         }
         
         Collections.sort(cityStringNames);
@@ -126,13 +144,70 @@ public class SearchMap {
         		{
         			int currentSource = stringToInt.get(sourceString);
         			int currentDestination = stringToInt.get(entry.getKey());
-        			int currentCost = entry.getValue();
+        			//int currentCost = entry.getValue();
       
-        			fm.addEdge(currentSource, currentDestination, currentCost);
+        			fm.addEdge(currentSource, currentDestination);
         		}
         }
         
-        int [][]fmMap = fm.getGraphOfCities();
+       
+        int originInteger = stringToInt.get(fm.getOriginCity().getName());
+        
+        for (int i = 0; i < cityList.size(); i++)
+        {
+        		//System.out.println(originInteger + "|" + i);
+        		fm.getPaths(originInteger, i);
+        		
+        }
+        
+        Vector<Integer> finalList = fm.finalCity;
+        System.out.println(finalList);
+      
+        
+        for (int i = 0; i < finalList.size(); i++)
+        {
+        		if (finalList.get(i) == originInteger && finalList.get(i+1) == 9999)
+        		{
+        			finalList.remove(i);
+        			finalList.remove(i);
+        		}
+        }
+        
+        
+        for (int i = 0; i < finalList.size(); i++)
+        {
+        		int finalCost = 0;
+        		while (finalList.get(i) != 9999)
+        		{
+        			int intToConvert = finalList.get(i);
+        			String trueCity = (String) getKeyFromValue(stringToInt, intToConvert);
+        			for (int x = 0; x < cityList.size(); x++)
+        			{
+        				if (cityList.get(x).name.equals(trueCity))
+        				{
+        					for (Map.Entry<String, Integer> entry : cityList.get(x).connectedCities.entrySet()) 
+        					{
+        						String connectedCity = (String) getKeyFromValue(stringToInt, finalList.get(i+1));
+        						if (connectedCity.equals(entry.getKey()))
+        						{
+        							finalCost += entry.getValue();
+        						}
+        					}
+        				}
+        			}
+        			System.out.println(finalCost);
+        		}
+        		i++;
+        		finalCost = 0;
+        }
+        
+        
+       
+        
+       
+        
+        /*
+       // int [][]fmMap = fm.getGraphOfCities();
         
         for (int i = 0; i < fmMap.length; i++) {
             for (int j = 0; j < fmMap[i].length; j++) {
@@ -140,15 +215,27 @@ public class SearchMap {
             }
             System.out.println();
         }
+        */
+        /*
+        int originInteger = stringToInt.get(fm.getOriginCity().getName());
+        BFS bfs = new BFS(fmMap, originInteger);
+        	Vector<Integer> cityOrder = bfs.realBFS(fmMap, originInteger);
+        	Vector<String> destinations = new Vector<String>();
+        	for (int x = 0; x < cityOrder.size(); x++)
+        	{
+        		destinations.add((String) getKeyFromValue(stringToInt, cityOrder.get(x)));
+        	}    
+        	
+        destinations.remove(fm.getOriginCity().getName());
+        	PathFinder pf = new PathFinder();
         
-        for (int i = 0; i < cityStringNames.size(); i++)
+        for (int i = 0; i < destinations.size(); i++)
         {
-        		if (fm.getOriginCity().getName().equals(cityStringNames.get(i)))
-        		{
-        			BFS bfs = new BFS(fmMap, i);
-        			break;
-        		}
-        } 
+         	pf.findPaths(fmMap, originInteger, stringToInt.get(destinations.get(i)));
+        }
+        */
+       
+        	
     }
 		// TODO Auto-generated method stub
 }

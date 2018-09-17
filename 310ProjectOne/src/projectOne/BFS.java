@@ -2,11 +2,16 @@ package projectOne;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Vector;
 
 public class BFS {
 
 	public BFS(int [][] flightMatrix, int origin) {
 		// TODO Auto-generated constructor stub
+	}
+	
+	public Vector<Integer> realBFS(int [][]flightMatrix, int origin)
+	{
 		int n = flightMatrix.length;
 		
 		boolean[] visited = new boolean[n];
@@ -16,12 +21,14 @@ public class BFS {
 		cityQueue.add(origin);
 		visited[origin] = true;
 		
+		Vector<Integer> cityOrder = new Vector<Integer>();
+		
 		while (cityQueue.isEmpty() == false)
 		{
 			int currentCity = cityQueue.peek();
 			cityQueue.poll();
 			
-			System.out.print(currentCity);
+			cityOrder.add(currentCity);
 			
 			for (int i = 0; i < flightMatrix[currentCity].length; i++)
 			{
@@ -40,5 +47,6 @@ public class BFS {
 				}
 			}
 		}
+		return cityOrder;
 	}
 }
